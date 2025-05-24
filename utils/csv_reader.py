@@ -5,6 +5,7 @@ COLUMN_NAMES = {
     'rate': ['rate', 'Rate', 'hourly_rate', 'salary']
 }
 
+
 def normalize_headers(headers: list[str]) -> dict[str, int]:
     normalized = {}
     for i, h in enumerate(headers):
@@ -38,9 +39,11 @@ def read_csv(path: str) -> list[dict]:
                 try:
                     value = float(value)
                 except ValueError:
-                    raise ValueError(f"Невозможно преобразовать '{value}' в число (поле '{key}').")
+                    raise ValueError(
+                        f"Невозможно преобразовать '{value}'"
+                        f" в число (поле '{key}')."
+                    )
             row[key] = value
 
         rows.append(row)
-    print(rows,'!!!')
     return rows

@@ -1,5 +1,6 @@
 from reports.payout_report import PayoutReport
 
+
 def test_payout_report_generation():
     rows = [
         {'name': 'Alice', 'department': 'IT', 'hours': 40.0, 'rate': 25.0},
