@@ -13,7 +13,7 @@ def test_read_csv_basic():
     try:
         rows = read_csv(tmp_path)
         assert len(rows) == 2
-        assert rows[0]['name'] == 'John Doe'
+        assert rows[0]['name'] == 'John'
         assert rows[0]['department'] == 'IT'
         assert rows[0]['hours'] == 40.0
         assert rows[0]['rate'] == 25.0

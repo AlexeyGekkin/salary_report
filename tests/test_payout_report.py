@@ -10,11 +10,29 @@ def test_payout_report_generation():
 
     report = PayoutReport().generate(rows)
 
-    assert any("Alice" in line for line in report)
-    assert any("Bob" in line for line in report)
-    assert any("Eve" in line for line in report)
-    assert any("IT" in line for line in report)
-    assert any("HR" in line for line in report)
-    assert any("$1000.0" in line for line in report)  # Alice
-    assert any("$1050.0" in line for line in report)  # Bob
-    assert any("$1064.0" in line for line in report)  # Eve
+    assert "IT" in report
+    assert "HR" in report
+
+    all_lines = []
+    for lines in report.values():
+        all_lines.extend(lines)
+
+    # Проверка присутствия имён
+    assert any("Alice" in line for line in all_lines)
+    assert any("Bob" in line for line in all_lines)
+    assert any("Eve" in line for line in all_lines)
+
+    # Проверка корректных выплат
+    assert any("$1000.0" in line for line in all_lines)  # 40 * 25
+    assert any("$1050.0" in line for line in all_lines)  # 35 * 30
+    assert any("$1064.0" in line for line in all_lines)  # 38 * 28
+
+    # Проверка итогов по отделу IT
+    it_totals = [line for line in report["IT"] if "$" in line][-1]
+    assert "75.0" in it_totals  # Сумма часов: 40 + 35
+    assert "$2050.0" in it_totals  # Выплата: 1000 + 1050
+
+    # Проверка итогов по отделу HR
+    hr_totals = [line for line in report["HR"] if "$" in line][-1]
+    assert "38.0" in hr_totals
+    assert "$1064.0" in hr_totals

@@ -1,36 +1,35 @@
 class PayoutReport:
-    def generate(self, rows: list[dict]) -> list[str]:
-        report_lines = [
+    def generate(self, rows: list[dict]) -> dict[str, list[str]]:
+        header = (
             f"{' ':14}"
             f"{'name':<20}"
             f"{'hours':<7}"
             f"{'rate':<7}"
-            f"${'payout':<7}"
-        ]
-        departments = {}
+            f"{'payout':<7}"
+        )
+
+        report = {}
 
         for row in rows:
-            department = row["department"]
-            if department not in departments:
-                departments[department] = []
-            departments[department].append(row)
-        for department, employees in departments.items():
-            report_lines.append(
-                f"{department}"
+            dept = row["department"]
+            if dept not in report:
+                report[dept] = [header]
+            hours = float(row["hours"])
+            rate = float(row["rate"])
+            payout = hours * rate
+            report[dept].append(
+                f"{'-' * 14}"
+                f"{row['name']:<20}"
+                f"{hours:<7.1f}"
+                f"{rate:<7.1f}"
+                f"${payout:<7.2f}"
             )
-            total = 0
-            for emp in employees:
-                payout = emp["hours"] * emp["rate"]
-                total += payout
-                report_lines.append(
-                    f"{'-' * 14}"
-                    f"{emp['name']:<20}"
-                    f"{emp['hours']:<7}"
-                    f"{emp['rate']:<7}"
-                    f"${payout:<7}"
 
-                )
-            report_lines.append(f"{' ' * 34}${total}")
-            report_lines.append("")
+        for dept, lines in report.items():
+            total_hours = sum(float(r["hours"]) for r in rows if r["department"] == dept)
+            total_payout = sum(float(r["hours"]) * float(r["rate"]) for r in rows if r["department"] == dept)
+            lines.append(
+                f"{' ' * 34}{total_hours:<14.1f}${total_payout:<7.2f}"
+            )
 
-        return report_lines
+        return report

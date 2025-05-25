@@ -1,0 +1,4 @@
+id,email,Dep, name, hours_worked,hourly_rate
+1,alice@example.com,Marketing,yan,180,50
+2,bob@example.com,Design,vanya,190,40
+3,carol@example.com,Design,BoB,100,60
