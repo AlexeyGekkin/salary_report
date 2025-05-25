@@ -30,3 +30,5 @@ pytest --cov=. --cov-report=term
 
 - Входные файлы — CSV  
 - Вывод — JSON по умолчанию
+## Пример вывода отчета
+![image](https://github.com/user-attachments/assets/57af3a5d-9323-4ae6-98bd-ab09ab44a4a8)
