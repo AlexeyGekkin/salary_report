@@ -13,19 +13,22 @@ def parse_args(args: List[str]) -> argparse.Namespace:
         description="Формирование отчётов по зарплатам из CSV-файлов"
     )
     parser.add_argument(
-        'files',
-        nargs='*',
-        help='Пути к CSV-файлам. Если не указаны — берутся все из папки data/'
+        "files",
+        nargs="*",
+        help="Пути к CSV-файлам. Если не указаны — берутся все из папки data/",
     )
     parser.add_argument(
-        '--report',
+        "--report",
         required=True,
-        help='Тип отчёта (например: payout)'
+        choices=list(REPORTS.keys()),
+        help=f'Тип отчёта. Доступные: {", ".join(REPORTS)}',
     )
     parser.add_argument(
         "--format",
         default="json",
-        help="Формат вывода (json)")
+        choices=list(FORMATTERS.keys()),
+        help=f'Формат вывода. Доступные: {", ".join(FORMATTERS)}',
+    )
     return parser.parse_args(args)
 
 
@@ -35,22 +38,16 @@ def main() -> None:
     report_name = args.report
     output_format = args.format
     if not files:
-        if not os.path.isdir('data'):
+        if not os.path.isdir("data"):
             print("Ошибка: папка 'data' не найдена и файлы не указаны.")
             sys.exit(1)
 
         files = [
-            os.path.join('data', f)
-            for f in os.listdir('data')
-            if f.endswith('.csv')
+            os.path.join("data", f) for f in os.listdir("data") if f.endswith(".csv")
         ]
 
     if not files:
         print("Ошибка: нет CSV-файлов для обработки.")
-        sys.exit(1)
-
-    if report_name not in REPORTS:
-        print(f"Неизвестный тип отчёта: {report_name}")
         sys.exit(1)
 
     all_rows = []
